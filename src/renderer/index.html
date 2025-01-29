@@ -9,7 +9,7 @@
     <link href="styles.css" rel="stylesheet">
   </head>
   <body class="bg-bg-darker">
-    <div class="flex">
+    <div class="flex h-screen dashboard-layout">
       <!-- Include Sidebar -->
       <div id="sidebar"></div>
 
@@ -17,38 +17,35 @@
       <div class="flex-1 p-8">
         <!-- Wallet Overview -->
         <div class="border border-border bg-bg-primary rounded-lg p-6 mb-6">
-          <h2 class="heading-text">Wallet Overview</h2>
+          <h2 class="heading-text mb-4">Wallet Overview</h2>
           
-          <!-- Address and QR Section -->
-          <div class="grid grid-cols-2 gap-6 mb-6">
-            <!-- Address Section -->
-            <div class="border border-border bg-bg-dark p-6 rounded-lg col-span-2">
-              <p class="text-xs text-text-secondary mb-2">Wallet Address</p>
-              <div class="flex items-center justify-between">
-                <p id="walletAddress" class="text-sm font-pixel text-text-primary break-all mr-2"></p>
-                <button id="copyAddress" class="px-3 py-1 text-xs border border-border hover:bg-hover rounded transition-colors duration-300 whitespace-nowrap">
-                  Copy
-                </button>
-              </div>
+          <!-- Address Section -->
+          <div class="border border-border bg-bg-dark p-4 rounded-lg mb-4">
+            <p class="text-xs text-text-secondary mb-2">Wallet Address</p>
+            <div class="flex items-center justify-between">
+              <p id="walletAddress" class="text-sm font-pixel text-text-primary break-all mr-2"></p>
+              <button id="copyAddress" class="px-3 py-1 text-xs border border-border hover:bg-hover rounded transition-colors duration-300 whitespace-nowrap">
+                Copy
+              </button>
             </div>
           </div>
 
           <!-- Stats Grid -->
-          <div class="grid grid-cols-3 gap-6">
+          <div class="grid grid-cols-3 gap-4">
             <!-- Balance -->
-            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+            <div class="border border-border bg-bg-dark p-4 rounded-lg">
               <p class="text-xs text-text-secondary mb-2">Balance</p>
               <p id="walletBalance" class="text-sm font-pixel text-text-primary">0 STX</p>
             </div>
             
             <!-- Current Value -->
-            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+            <div class="border border-border bg-bg-dark p-4 rounded-lg">
               <p class="text-xs text-text-secondary mb-2">Current Value</p>
               <p id="walletValue" class="text-sm font-pixel text-text-primary">$0.00</p>
             </div>
 
             <!-- Wallet Name -->
-            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+            <div class="border border-border bg-bg-dark p-4 rounded-lg">
               <p class="text-xs text-text-secondary mb-2">Wallet Name</p>
               <p id="walletName" class="text-sm font-pixel text-text-primary truncate">-</p>
             </div>
@@ -57,7 +54,7 @@
 
         <!-- Transactions Section -->
         <div class="border border-border bg-bg-dark p-6 rounded-lg mt-6">
-          <p class="text-xs text-text-secondary mb-4">Recent Transactions</p>
+          <h2 class="heading-text mb-4">Recent Transactions</h2>
           <div id="transactionsList" class="space-y-4">
             <!-- Transactions will be added here -->
           </div>

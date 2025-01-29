@@ -281,8 +281,62 @@ input[type="password"] {
   @apply flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300;
   font-family: 'Press Start 2P', cursive;
   font-size: 12px;
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 .nav-link.active {
   @apply text-hover bg-bg-primary;
+}
+
+/* Layout styles - Sadece ana sayfa için */
+.dashboard-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-layout .flex-1 {
+  height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+  margin-left: 16rem; /* Sidebar genişliği kadar margin */
+  will-change: transform; /* Performance optimization */
+  backface-visibility: hidden; /* Prevent flickering */
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+.dashboard-layout #sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  position: fixed; /* Sidebar'ı sabitle */
+  left: 0;
+  top: 0;
+  width: 16rem;
+  z-index: 10;
+  will-change: transform; /* Performance optimization */
+  backface-visibility: hidden; /* Prevent flickering */
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* Transactions list spacing */
+#transactionsList > div {
+  margin-bottom: 0.75rem;
+}
+
+#transactionsList > div:last-child {
+  margin-bottom: 0;
+}
+
+/* Logo container styles */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Logo text styles */
+.logo-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  color: theme('colors.text-secondary');
+  margin-left: 1rem;
 } 
