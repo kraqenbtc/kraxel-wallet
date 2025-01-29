@@ -97,4 +97,46 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     window.location.href = 'wallet-setup.html';
   }
+
+  // Send form handler
+  const sendForm = document.getElementById('sendForm');
+  sendForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const recipientAddress = (document.getElementById('recipientAddress') as HTMLInputElement).value;
+    const amount = parseFloat((document.getElementById('amount') as HTMLInputElement).value);
+    const memo = (document.getElementById('memo') as HTMLInputElement).value;
+    
+    try {
+      const savedWallet = localStorage.getItem('selectedWallet');
+      if (!savedWallet) throw new Error('No wallet selected');
+      
+      const wallet = JSON.parse(savedWallet);
+      
+      // Transaction'ı gönder
+      const result = await window.wallet.sendSTX(
+        wallet.privateKey, 
+        recipientAddress, 
+        amount,
+        memo
+      );
+      
+      if (result.success) {
+        alert(`Transaction sent successfully!\nTXID: ${result.txid}`);
+        // Form'u temizle
+        (document.getElementById('sendForm') as HTMLFormElement).reset();
+        
+        // Balance'ı güncelle
+        const newBalance = await window.wallet.getBalance(wallet.address);
+        wallet.balance = newBalance;
+        localStorage.setItem('selectedWallet', JSON.stringify(wallet));
+        
+        if (walletBalance) {
+          walletBalance.textContent = `${Number(newBalance).toFixed(6)} STX`;
+        }
+      }
+    } catch (error: any) {
+      alert(`Failed to send STX: ${error.message}`);
+    }
+  });
 }); 

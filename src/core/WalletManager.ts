@@ -1,7 +1,13 @@
 import { 
   makeRandomPrivKey, 
   getAddressFromPrivateKey,
+  makeSTXTokenTransfer,
+  broadcastTransaction,
+  standardPrincipalCV,
+  PostConditionMode,
+  SignedTokenTransferOptions
 } from '@stacks/transactions';
+import { STACKS_MAINNET } from '@stacks/network';
 import { NetworkManager } from './StacksNetwork';
 
 interface Transaction {
@@ -50,7 +56,6 @@ export class WalletManager {
       
       const data = await response.json();
       const balanceInMicroStx = data.stx?.balance || '0';
-      // 6 decimal için 1_000_000'a böl
       const balanceInStx = (Number(balanceInMicroStx) / 1_000_000).toFixed(6);
       return balanceInStx;
     } catch (error) {
@@ -78,13 +83,90 @@ export class WalletManager {
           tx_type: tx.tx_type,
           tx_status: tx.tx_status,
           amount: (Number(amount) / 1_000_000).toFixed(6),
-          timestamp: tx.burn_block_time * 1000, // Unix timestamp to milliseconds
+          timestamp: tx.burn_block_time * 1000,
           sender: tx.sender_address,
           recipient: tx.token_transfer?.recipient_address || ''
         };
       });
     } catch (error) {
       return [];
+    }
+  }
+
+  public async sendSTX(
+    senderKey: string,
+    recipientAddress: string,
+    amount: number,
+    memo: string = ''
+  ) {
+    try {
+      if (!senderKey || typeof senderKey !== 'string') {
+        throw new Error('Private key is required');
+      }
+
+      if (!recipientAddress) {
+        throw new Error('Recipient address is required');
+      }
+
+      if (!amount || amount <= 0) {
+        throw new Error('Invalid amount');
+      }
+
+      // Private key'i hex formatına çevir
+      const privateKeyHex = senderKey.startsWith('0x') ? senderKey : `0x${senderKey}`;
+      
+      const network = this.networkManager.getNetwork();
+      const amountInMicroSTX = Math.floor(amount * 1_000_000);
+
+      // Get sender address
+      const senderAddress = getAddressFromPrivateKey(privateKeyHex, 'mainnet');
+
+      // Get nonce
+      const accountResponse = await fetch(
+        `https://api.hiro.so/v2/accounts/${senderAddress}?proof=0`
+      );
+      
+      if (!accountResponse.ok) {
+        throw new Error('Failed to fetch account info');
+      }
+      
+      const accountData = await accountResponse.json();
+      const nonce = accountData.nonce;
+
+      // Sabit fee kullan (0.003 STX)
+      const fee = 3000; // 0.003 STX in microSTX
+
+      // Create transaction options
+      const txOptions = {
+        recipient: standardPrincipalCV(recipientAddress),
+        amount: amountInMicroSTX,
+        senderKey: privateKeyHex,
+        network,
+        memo,
+        nonce,
+        fee
+      };
+
+      // Make and sign transaction
+      const transaction = await makeSTXTokenTransfer(txOptions);
+
+      // Broadcast transaction
+      const broadcastResponse = await broadcastTransaction({
+        transaction,
+        network
+      });
+
+      if ('error' in broadcastResponse) {
+        throw new Error(broadcastResponse.error);
+      }
+
+      return {
+        success: true,
+        txid: broadcastResponse.txid
+      };
+    } catch (error: any) {
+      console.error('Error sending STX:', error);
+      throw new Error(error.message || 'Failed to send STX');
     }
   }
 } 

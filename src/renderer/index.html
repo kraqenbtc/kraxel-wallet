@@ -2,94 +2,92 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>KRAXEL-WALLET</title>
+    <title>KRAXEL-WALLET - Dashboard</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
   </head>
   <body class="bg-bg-darker">
-    <div id="app" class="min-h-screen font-pixel">
+    <div class="flex">
       <!-- Sidebar -->
-      <div class="flex">
-        <div class="w-64 h-screen bg-bg-dark border-r border-border">
-          <div class="mb-8 p-6 flex items-center justify-center">
-            <img src="asset://kraxel.png" alt="KRAXEL" class="w-12 h-12 mr-3">
-            <h1 class="text-xl font-pixel text-text-secondary animate-glow">KRAXEL</h1>
+      <div class="w-64 h-screen bg-bg-dark border-r border-border">
+        <div class="mb-8 p-6 flex items-center justify-center">
+          <img src="asset://kraxel.png" alt="KRAXEL" class="w-12 h-12 mr-3">
+          <h1 class="text-xl font-pixel text-text-secondary animate-glow">KRAXEL</h1>
+        </div>
+        <nav>
+          <ul class="space-y-4">
+            <li>
+              <a href="index.html" class="flex items-center text-hover bg-bg-primary p-4">
+                <span class="text-sm">▶ Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="send.html" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
+                <span class="text-sm">▶ Send</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
+                <span class="text-sm">▶ Transactions</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
+                <span class="text-sm">▶ Settings</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 p-8">
+        <!-- Wallet Overview -->
+        <div class="border border-border bg-bg-primary rounded-lg p-6 mb-6">
+          <h2 class="text-lg font-pixel text-text-secondary mb-6">Wallet Overview</h2>
+          
+          <!-- Address and QR Section -->
+          <div class="grid grid-cols-2 gap-6 mb-6">
+            <!-- Address Section -->
+            <div class="border border-border bg-bg-dark p-6 rounded-lg col-span-2">
+              <p class="text-xs text-text-secondary mb-2">Wallet Address</p>
+              <div class="flex items-center justify-between">
+                <p id="walletAddress" class="text-sm font-pixel text-text-primary break-all mr-2"></p>
+                <button id="copyAddress" class="px-3 py-1 text-xs border border-border hover:bg-hover rounded transition-colors duration-300 whitespace-nowrap">
+                  Copy
+                </button>
+              </div>
+            </div>
           </div>
-          <nav>
-            <ul class="space-y-4">
-              <li>
-                <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                  <span class="text-sm">▶ Dashboard</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                  <span class="text-sm">▶ Send</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                  <span class="text-sm">▶ Transactions</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                  <span class="text-sm">▶ Settings</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-3 gap-6">
+            <!-- Balance -->
+            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+              <p class="text-xs text-text-secondary mb-2">Balance</p>
+              <p id="walletBalance" class="text-sm font-pixel text-text-primary">0 STX</p>
+            </div>
+            
+            <!-- Current Value -->
+            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+              <p class="text-xs text-text-secondary mb-2">Current Value</p>
+              <p id="walletValue" class="text-sm font-pixel text-text-primary">$0.00</p>
+            </div>
+
+            <!-- Wallet Name -->
+            <div class="border border-border bg-bg-dark p-6 rounded-lg">
+              <p class="text-xs text-text-secondary mb-2">Wallet Name</p>
+              <p id="walletName" class="text-sm font-pixel text-text-primary truncate">-</p>
+            </div>
+          </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 p-8">
-          <!-- Wallet Overview -->
-          <div class="border border-border bg-bg-primary rounded-lg p-6 mb-6">
-            <h2 class="text-lg font-pixel text-text-secondary mb-6">Wallet Overview</h2>
-            
-            <!-- Address and QR Section -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
-              <!-- Address Section -->
-              <div class="border border-border bg-bg-dark p-6 rounded-lg col-span-2">
-                <p class="text-xs text-text-secondary mb-2">Wallet Address</p>
-                <div class="flex items-center justify-between">
-                  <p id="walletAddress" class="text-sm font-pixel text-text-primary break-all mr-2"></p>
-                  <button id="copyAddress" class="px-3 py-1 text-xs border border-border hover:bg-hover rounded transition-colors duration-300 whitespace-nowrap">
-                    Copy
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-6">
-              <!-- Balance -->
-              <div class="border border-border bg-bg-dark p-6 rounded-lg">
-                <p class="text-xs text-text-secondary mb-2">Balance</p>
-                <p id="walletBalance" class="text-sm font-pixel text-text-primary">0 STX</p>
-              </div>
-              
-              <!-- Current Value -->
-              <div class="border border-border bg-bg-dark p-6 rounded-lg">
-                <p class="text-xs text-text-secondary mb-2">Current Value</p>
-                <p id="walletValue" class="text-sm font-pixel text-text-primary">$0.00</p>
-              </div>
-
-              <!-- Wallet Name -->
-              <div class="border border-border bg-bg-dark p-6 rounded-lg">
-                <p class="text-xs text-text-secondary mb-2">Wallet Name</p>
-                <p id="walletName" class="text-sm font-pixel text-text-primary truncate">-</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Transactions Section -->
-          <div class="border border-border bg-bg-dark p-6 rounded-lg mt-6">
-            <p class="text-xs text-text-secondary mb-4">Recent Transactions</p>
-            <div id="transactionsList" class="space-y-4">
-              <!-- Transactions will be added here -->
-            </div>
+        <!-- Transactions Section -->
+        <div class="border border-border bg-bg-dark p-6 rounded-lg mt-6">
+          <p class="text-xs text-text-secondary mb-4">Recent Transactions</p>
+          <div id="transactionsList" class="space-y-4">
+            <!-- Transactions will be added here -->
           </div>
         </div>
       </div>

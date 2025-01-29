@@ -122,14 +122,17 @@ class MainApplication {
 
     ipcMain.handle('wallet:select', async (_, address: string, pin: string) => {
       try {
+        if (!fs.existsSync(this.walletPath)) {
+          throw new Error('No wallet found');
+        }
+
         const walletsData: WalletsStorage = JSON.parse(fs.readFileSync(this.walletPath, 'utf8'));
-        
         const selectedWallet = walletsData.wallets.find(w => 
           w.address === address && w.pin === pin
         );
         
         if (!selectedWallet) {
-          throw new Error('Invalid wallet or PIN');
+          return { success: false, message: 'Invalid wallet or PIN' };
         }
 
         walletsData.activeWallet = address;
@@ -141,18 +144,31 @@ class MainApplication {
           success: true,
           wallet: {
             address: selectedWallet.address,
+            privateKey: selectedWallet.privateKey,
             name: selectedWallet.name,
             balance: balance.toString()
           }
         };
       } catch (error) {
-        throw error;
+        console.error('Error selecting wallet:', error);
+        return { success: false, message: (error as Error).message };
       }
     });
 
     ipcMain.handle('wallet:getTransactions', async (_, address: string) => {
       return await this.walletManager.getTransactions(address);
     });
+
+    ipcMain.handle(
+      'wallet:sendSTX',
+      async (_, senderKey: string, recipientAddress: string, amount: number, memo: string) => {
+        try {
+          return await this.walletManager.sendSTX(senderKey, recipientAddress, amount, memo);
+        } catch (error) {
+          throw error;
+        }
+      }
+    );
   }
 
   private async encryptWallet(wallet: { address: string; privateKey: string }) {
