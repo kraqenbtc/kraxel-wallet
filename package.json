@@ -15,7 +15,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build:css": "tailwindcss -i ./src/renderer/styles.css -o ./build/renderer/styles.css --minify",
-    "copy-files": "cp src/renderer/*.html build/renderer/ && cp -r src/assets build/ && cp -r src/renderer/assets build/renderer/",
+    "copy-files": "mkdir -p build/renderer/components && cp src/renderer/components/*.html build/renderer/components/ && cp src/renderer/*.html build/renderer/ && cp -r src/assets build/ && cp -r src/renderer/assets build/renderer/",
     "clean-wallets": "ts-node src/utils/clean-wallets.ts"
   },
   "keywords": [],
@@ -23,23 +23,26 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.12.0",
+    "@types/qrcode": "^1.5.5",
     "autoprefixer": "^10.4.20",
+    "copyfiles": "^2.4.1",
     "electron": "^34.0.1",
     "electron-builder": "^25.1.8",
     "postcss": "^8.5.1",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.3",
-    "@types/qrcode": "^1.5.5"
+    "typescript": "^5.7.3"
   },
   "build": {
     "appId": "com.kraxel.wallet",
     "productName": "KRAXEL WALLET",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "assets"
     },
     "files": [
       "build/**/*",
-      "assets/**/*"
+      "src/renderer/**/*.html",
+      "src/assets/**/*"
     ]
   },
   "dependencies": {

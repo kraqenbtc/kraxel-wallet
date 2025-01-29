@@ -41,6 +41,10 @@ contextBridge.exposeInMainWorld('api', {
   }
 });
 
+contextBridge.exposeInMainWorld('app', {
+  loadSidebarContent: () => ipcRenderer.invoke('app:loadSidebarContent')
+});
+
 declare global {
   interface Window {
     wallet: {
@@ -54,6 +58,9 @@ declare global {
       getTransactions: (address: string) => Promise<Transaction[]>;
       sendSTX: (senderKey: string, recipientAddress: string, amount: number, memo: string) => 
         Promise<{ success: boolean; txid: string }>;
+    };
+    app: {
+      loadSidebarContent: () => Promise<string>;
     };
   }
 } 

@@ -1,6 +1,7 @@
 import { app, BrowserWindow, protocol, ipcMain } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as fsPromises from 'fs/promises';
 import { WalletManager } from './core/WalletManager';
 import { NetworkManager } from './core/StacksNetwork';
 
@@ -21,11 +22,13 @@ class MainApplication {
   private walletManager: WalletManager;
   private networkManager: NetworkManager;
   private walletPath: string;
+  private isDevelopment: boolean;
 
   constructor() {
     this.walletManager = WalletManager.getInstance();
     this.networkManager = NetworkManager.getInstance();
     this.walletPath = path.join(app.getPath('userData'), 'wallet.json');
+    this.isDevelopment = process.env.NODE_ENV === 'development';
     this.initialize();
     this.setupIPCHandlers();
   }
@@ -169,6 +172,26 @@ class MainApplication {
         }
       }
     );
+
+    ipcMain.handle('app:loadSidebarContent', async () => {
+      try {
+        let sidebarPath;
+        if (this.isDevelopment) {
+          // Development modunda src klasöründen oku
+          sidebarPath = path.join(__dirname, '..', 'src', 'renderer', 'components', 'sidebar.html');
+        } else {
+          // Production modunda build klasöründen oku
+          sidebarPath = path.join(__dirname, 'renderer', 'components', 'sidebar.html');
+        }
+        
+        console.log('Loading sidebar from:', sidebarPath); // Debug için
+        const content = await fsPromises.readFile(sidebarPath, 'utf8');
+        return content;
+      } catch (error) {
+        console.error('Failed to load sidebar content:', error);
+        throw error;
+      }
+    });
   }
 
   private async encryptWallet(wallet: { address: string; privateKey: string }) {
@@ -209,10 +232,25 @@ class MainApplication {
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        preload: path.join(__dirname, 'preload.js')
+        preload: path.join(__dirname, 'preload.js'),
+        webSecurity: true,
+        allowRunningInsecureContent: false
       },
-      backgroundColor: '#13111d' // bg-darker rengi
+      backgroundColor: '#13111d'
     });
+
+    // Protocol handler'ı register et
+    if (!protocol.isProtocolRegistered('asset')) {
+      protocol.registerFileProtocol('asset', (request, callback) => {
+        const url = request.url.replace('asset://', '');
+        const decodedUrl = decodeURI(url);
+        try {
+          return callback(path.join(__dirname, '..', 'src', 'assets', decodedUrl));
+        } catch (error) {
+          console.error('Failed to register protocol', error);
+        }
+      });
+    }
 
     this.mainWindow.loadFile(path.join(__dirname, 'renderer', 'wallet-setup.html'));
 

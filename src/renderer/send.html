@@ -3,59 +3,31 @@
   <head>
     <meta charset="UTF-8">
     <title>KRAXEL-WALLET - Send STX</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' asset: https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' asset: data:;">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
   </head>
   <body class="bg-bg-darker">
     <div class="flex">
-      <!-- Sidebar -->
-      <div class="w-64 h-screen bg-bg-dark border-r border-border">
-        <div class="mb-8 p-6 flex items-center justify-center">
-          <img src="asset://kraxel.png" alt="KRAXEL" class="w-12 h-12 mr-3">
-          <h1 class="text-xl font-pixel text-text-secondary animate-glow">KRAXEL</h1>
-        </div>
-        <nav>
-          <ul class="space-y-4">
-            <li>
-              <a href="index.html" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="send.html" class="flex items-center text-hover bg-bg-primary p-4">
-                <span class="text-sm">▶ Send</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Transactions</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Settings</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <!-- Include Sidebar -->
+      <div id="sidebar"></div>
 
       <!-- Main Content -->
       <div class="flex-1 p-8">
         <div class="border border-border bg-bg-primary rounded-lg p-6">
-          <h2 class="text-lg font-pixel text-text-secondary mb-6">Send STX</h2>
+          <h2 class="heading-text">Send STX</h2>
           
           <!-- Balance Info -->
           <div class="mb-6 p-4 bg-bg-dark rounded-lg border border-border">
-            <p class="text-xs text-text-secondary">Available Balance</p>
-            <p id="walletBalance" class="text-xl font-pixel text-text-primary mt-2">0.000000 STX</p>
+            <p class="section-title mb-2">Available Balance</p>
+            <p id="walletBalance" class="balance-text">0.000000 STX</p>
           </div>
 
           <!-- Send Form -->
           <form id="sendForm" class="space-y-6">
             <div>
-              <label class="text-xs text-text-secondary mb-2 block">Recipient Address</label>
+              <label class="section-title block">Recipient Address</label>
               <input 
                 type="text" 
                 id="recipientAddress"
@@ -66,7 +38,7 @@
             </div>
             
             <div>
-              <label class="text-xs text-text-secondary mb-2 block">Amount (STX)</label>
+              <label class="section-title block">Amount (STX)</label>
               <input 
                 type="number" 
                 id="amount"
@@ -80,7 +52,7 @@
             </div>
             
             <div>
-              <label class="text-xs text-text-secondary mb-2 block">Memo (Optional)</label>
+              <label class="section-title block">Memo (Optional)</label>
               <input 
                 type="text" 
                 id="memo"
@@ -92,7 +64,7 @@
 
             <button 
               type="submit"
-              class="w-full bg-hover text-text-primary p-4 rounded-lg hover:bg-opacity-90 transition-all duration-300 font-pixel"
+              class="w-full bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300"
             >
               Send STX
             </button>
@@ -104,7 +76,7 @@
     <!-- PIN Modal -->
     <div id="pinModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
       <div class="bg-bg-dark border border-border rounded-lg p-6 w-96">
-        <h3 class="text-lg font-pixel text-text-secondary mb-4">Enter PIN</h3>
+        <h3 class="heading-text mb-4">Enter PIN</h3>
         <input 
           type="password" 
           id="pinInput"
@@ -115,13 +87,13 @@
         <div class="flex space-x-4">
           <button 
             id="confirmPin"
-            class="flex-1 bg-hover text-text-primary p-3 rounded-lg hover:bg-opacity-90 transition-all duration-300 font-pixel"
+            class="flex-1 bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300"
           >
             Confirm
           </button>
           <button 
             id="cancelPin"
-            class="flex-1 border border-border text-text-primary p-3 rounded-lg hover:bg-hover hover:border-hover transition-all duration-300 font-pixel"
+            class="flex-1 border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300"
           >
             Cancel
           </button>
@@ -129,6 +101,7 @@
       </div>
     </div>
 
+    <script src="components/sidebar.js"></script>
     <script src="send.js"></script>
   </body>
 </html> 

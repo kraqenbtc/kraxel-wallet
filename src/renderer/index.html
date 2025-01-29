@@ -3,49 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <title>KRAXEL-WALLET - Dashboard</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' asset: https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' asset: data:;">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
   </head>
   <body class="bg-bg-darker">
     <div class="flex">
-      <!-- Sidebar -->
-      <div class="w-64 h-screen bg-bg-dark border-r border-border">
-        <div class="mb-8 p-6 flex items-center justify-center">
-          <img src="asset://kraxel.png" alt="KRAXEL" class="w-12 h-12 mr-3">
-          <h1 class="text-xl font-pixel text-text-secondary animate-glow">KRAXEL</h1>
-        </div>
-        <nav>
-          <ul class="space-y-4">
-            <li>
-              <a href="index.html" class="flex items-center text-hover bg-bg-primary p-4">
-                <span class="text-sm">▶ Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="send.html" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Send</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Transactions</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="flex items-center text-text-primary hover:text-hover hover:bg-bg-primary p-4 transition-all duration-300">
-                <span class="text-sm">▶ Settings</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <!-- Include Sidebar -->
+      <div id="sidebar"></div>
 
       <!-- Main Content -->
       <div class="flex-1 p-8">
         <!-- Wallet Overview -->
         <div class="border border-border bg-bg-primary rounded-lg p-6 mb-6">
-          <h2 class="text-lg font-pixel text-text-secondary mb-6">Wallet Overview</h2>
+          <h2 class="heading-text">Wallet Overview</h2>
           
           <!-- Address and QR Section -->
           <div class="grid grid-cols-2 gap-6 mb-6">
@@ -92,6 +64,7 @@
         </div>
       </div>
     </div>
+    <script src="components/sidebar.js"></script>
     <script src="index.js"></script>
   </body>
 </html> 
