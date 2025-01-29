@@ -143,6 +143,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    // Fee control buttons
+    const feeUpBtn = feeModal?.querySelector('.fee-control-btn.up');
+    const feeDownBtn = feeModal?.querySelector('.fee-control-btn.down');
+
+    feeUpBtn?.addEventListener('click', () => {
+      if (feeInput) {
+        const currentValue = parseFloat(feeInput.value);
+        feeInput.value = (currentValue + 0.001).toFixed(3);
+      }
+    });
+
+    feeDownBtn?.addEventListener('click', () => {
+      if (feeInput) {
+        const currentValue = parseFloat(feeInput.value);
+        const newValue = Math.max(0.001, currentValue - 0.001);
+        feeInput.value = newValue.toFixed(3);
+      }
+    });
+
+    // Validate fee input
+    feeInput?.addEventListener('input', () => {
+      const value = parseFloat(feeInput.value);
+      if (value < 0.001) {
+        feeInput.value = '0.001';
+      }
+    });
+
     // Amount validation
     const validateAmount = (value: number) => {
       if (!amountInput) return;

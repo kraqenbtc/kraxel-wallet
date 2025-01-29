@@ -48,14 +48,14 @@
                 placeholder="0.000000"
                 required
               >
-              <div class="flex items-center justify-between mt-2">
+              <div class="flex items-center justify-center mt-2 space-x-2">
                 <p class="text-xs text-text-secondary">Fee: <span id="currentFee">0.003</span> STX</p>
                 <button 
                   type="button"
                   id="setFeeBtn"
-                  class="text-xs border border-border hover:bg-hover rounded px-2 py-1 transition-colors duration-300"
+                  class="text-xs border border-border hover:bg-hover rounded px-3 py-1 transition-colors duration-300 flex items-center gap-1"
                 >
-                  Set Fee
+                  <span>Set Fee</span>
                 </button>
               </div>
             </div>
@@ -142,26 +142,36 @@
     <!-- Fee Modal -->
     <div id="feeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
       <div class="bg-bg-dark border border-border rounded-lg p-6 w-96">
-        <h3 class="heading-text mb-4">Set Transaction Fee</h3>
-        <input 
-          type="number" 
-          id="feeInput"
-          step="0.0001"
-          min="0.001"
-          value="0.003"
-          class="w-full bg-bg-darker text-text-primary p-4 rounded-lg border border-border focus:outline-none focus:border-hover mb-4"
-          placeholder="Enter fee amount"
-        >
+        <h3 class="heading-text text-center mb-6">Set Transaction Fee</h3>
+        
+        <div class="flex flex-col items-center mb-6">
+          <div class="relative w-48 text-center">
+            <input 
+              type="number" 
+              id="feeInput"
+              step="0.001"
+              min="0.001"
+              value="0.003"
+              class="w-full bg-bg-darker text-text-primary p-4 rounded-lg border border-border focus:outline-none focus:border-hover appearance-none text-center text-lg"
+              placeholder="Enter fee amount"
+            >
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex flex-col gap-2">
+              <button type="button" class="fee-control-btn up">▲</button>
+              <button type="button" class="fee-control-btn down">▼</button>
+            </div>
+          </div>
+        </div>
+
         <div class="flex space-x-4">
           <button 
             id="confirmFee"
-            class="flex-1 bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300"
+            class="flex-1 bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300 py-3"
           >
             Confirm
           </button>
           <button 
             id="cancelFee"
-            class="flex-1 border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300"
+            class="flex-1 border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300 py-3"
           >
             Cancel
           </button>

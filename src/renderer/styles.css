@@ -339,4 +339,39 @@ input[type="password"] {
   font-size: 16px;
   color: theme('colors.text-secondary');
   margin-left: 1rem;
+}
+
+/* Fee Control Buttons */
+.fee-control-btn {
+  @apply text-xs text-text-secondary hover:text-hover transition-colors duration-300 px-3;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px !important;
+  line-height: 1;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.fee-control-btn:hover {
+  @apply text-hover;
+  transform: scale(1.2);
+  transition: all 0.2s ease;
+}
+
+/* Fee input specific styles */
+#feeInput {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px !important;
+  letter-spacing: 1px;
+  padding: 1rem 1.5rem;
+}
+
+/* Hide default number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 } 
