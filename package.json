@@ -1,0 +1,51 @@
+{
+  "name": "kraxel-wallet",
+  "version": "1.0.0",
+  "description": "A secure desktop wallet for the STX network",
+  "main": "build/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kraqenbtc/kraxel-wallet.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "tsc && npm run build:css && npm run copy-files",
+    "watch": "tsc -w",
+    "dev": "npm run build && electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build:css": "tailwindcss -i ./src/renderer/styles.css -o ./build/renderer/styles.css --minify",
+    "copy-files": "cp src/renderer/*.html build/renderer/ && cp -r src/assets build/ && cp -r src/renderer/assets build/renderer/",
+    "clean-wallets": "ts-node src/utils/clean-wallets.ts"
+  },
+  "keywords": [],
+  "author": "kraqenbtc",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "autoprefixer": "^10.4.20",
+    "electron": "^34.0.1",
+    "electron-builder": "^25.1.8",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.3",
+    "@types/qrcode": "^1.5.5"
+  },
+  "build": {
+    "appId": "com.kraxel.wallet",
+    "productName": "KRAXEL WALLET",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "assets/**/*"
+    ]
+  },
+  "dependencies": {
+    "@stacks/auth": "^7.0.2",
+    "@stacks/connect": "^7.10.0",
+    "@stacks/network": "^7.0.2",
+    "@stacks/transactions": "^7.0.2"
+  }
+}

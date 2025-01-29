@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-bg-darker text-text-primary;
+}
+
+/* Scrollbar stilleri */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-bg-darker;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-hover;
+}
+
+/* Pixel art border efekti */
+.pixel-border {
+  @apply border border-border;
+  box-shadow: 0 0 10px theme('colors.text-secondary');
+}
+
+/* Hover efektleri */
+.hover-glow:hover {
+  text-shadow: 0 0 10px theme('colors.text-secondary');
+  @apply transition-all duration-300;
+}
+
+/* Animasyonlu arka plan */
+.animated-bg {
+  background: linear-gradient(
+    45deg,
+    theme('colors.bg-dark'),
+    theme('colors.bg-darker'),
+    theme('colors.bg-primary')
+  );
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.blur-sm {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
+
+#privateKeyContainer {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#privateKeyContainer:active {
+  cursor: grabbing;
+}
+
+/* Wallet List Styles */
+.wallet-item {
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.wallet-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(157, 122, 234, 0.1); /* hover rengi daha hafif */
+}
+
+/* Button Hover Effects - Daha yumuşak geçişler */
+.select-wallet-btn, 
+.confirm-pin-btn, 
+.cancel-pin-btn,
+#createWallet,
+#importWallet {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover efektlerini sadeleştir */
+.select-wallet-btn:hover,
+.confirm-pin-btn:hover {
+  background-color: var(--color-success);
+  color: var(--color-bg-dark);
+  border-color: var(--color-success);
+}
+
+.cancel-pin-btn:hover,
+#createWallet:hover,
+#importWallet:hover {
+  background-color: var(--color-bg-dark);
+  border-color: var(--color-hover);
+}
+
+/* Glow efektini kaldır veya azalt */
+.animate-glow {
+  text-shadow: 0 0 5px rgba(183, 148, 246, 0.5);
+}
+
+/* Hover durumunda parlaklığı azalt */
+.hover\:bg-hover:hover {
+  background-color: rgba(159, 122, 234, 0.15);
+}
+
+/* Wallet item içindeki yazıları daha belirgin yap */
+.wallet-item .text-text-secondary {
+  color: var(--color-text-secondary);
+  opacity: 0.9;
+}
+
+.wallet-item .text-text-primary {
+  color: var(--color-text-primary);
+  opacity: 0.95;
+}
+
+/* PIN input form transition'ları */
+.pin-input-form {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.2s ease-out, margin 0.3s ease-out;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.pin-input-form:not(.hidden) {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: 1rem;
+}
+
+/* Input Styles */
+input[type="password"] {
+  font-family: monospace;
+  letter-spacing: 0.25em;
+}
+
+/* Error Message Animation */
+.error-message {
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.error-message:not(.hidden) {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Balance Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.wallet-item .text-text-secondary:last-child:empty::before {
+  content: "Loading...";
+  background: linear-gradient(90deg, 
+    var(--color-bg-dark) 25%, 
+    var(--color-bg-primary) 50%, 
+    var(--color-bg-dark) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Truncate with Fade */
+.truncate-fade {
+  position: relative;
+}
+
+.truncate-fade::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 2rem;
+  background: linear-gradient(to right, 
+    rgba(19, 17, 29, 0), 
+    var(--color-bg-primary) 90%
+  );
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .wallet-item {
+    padding: 1rem;
+  }
+  
+  .wallet-item .text-sm {
+    font-size: 0.75rem;
+  }
+  
+  .wallet-item .text-xs {
+    font-size: 0.625rem;
+  }
+}
+
+.no-blur {
+  filter: none !important;
+} 
