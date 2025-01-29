@@ -29,8 +29,8 @@ contextBridge.exposeInMainWorld('wallet', {
   getWallets: () => ipcRenderer.invoke('wallet:getWallets'),
   selectWallet: (address: string, pin: string) => ipcRenderer.invoke('wallet:select', address, pin),
   getTransactions: (address: string) => ipcRenderer.invoke('wallet:getTransactions', address),
-  sendSTX: (senderKey: string, recipientAddress: string, amount: number, memo: string) => 
-    ipcRenderer.invoke('wallet:sendSTX', senderKey, recipientAddress, amount, memo)
+  sendSTX: (senderKey: string, recipientAddress: string, amount: number, memo: string, fee: number) => 
+    ipcRenderer.invoke('wallet:sendSTX', senderKey, recipientAddress, amount, memo, fee)
 });
 
 contextBridge.exposeInMainWorld('api', {
@@ -56,7 +56,7 @@ declare global {
       getWallets: () => Promise<Array<{ address: string; name: string }>>;
       selectWallet: (address: string, pin: string) => Promise<{ success: boolean; wallet: any }>;
       getTransactions: (address: string) => Promise<Transaction[]>;
-      sendSTX: (senderKey: string, recipientAddress: string, amount: number, memo: string) => 
+      sendSTX: (senderKey: string, recipientAddress: string, amount: number, memo: string, fee: number) => 
         Promise<{ success: boolean; txid: string }>;
     };
     app: {

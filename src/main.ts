@@ -164,9 +164,9 @@ class MainApplication {
 
     ipcMain.handle(
       'wallet:sendSTX',
-      async (_, senderKey: string, recipientAddress: string, amount: number, memo: string) => {
+      async (_, senderKey: string, recipientAddress: string, amount: number, memo: string, fee: number) => {
         try {
-          return await this.walletManager.sendSTX(senderKey, recipientAddress, amount, memo);
+          return await this.walletManager.sendSTX(senderKey, recipientAddress, amount, memo, fee);
         } catch (error) {
           throw error;
         }

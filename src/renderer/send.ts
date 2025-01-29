@@ -5,12 +5,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pinInput = document.getElementById('pinInput') as HTMLInputElement;
   const confirmPin = document.getElementById('confirmPin');
   const cancelPin = document.getElementById('cancelPin');
+  const amountInput = document.getElementById('amount') as HTMLInputElement;
+  const recipientInput = document.getElementById('recipientAddress') as HTMLInputElement;
+  const memoInput = document.getElementById('memo') as HTMLInputElement;
+  const currentFeeElement = document.getElementById('currentFee');
 
   let pendingTransaction: {
     recipientAddress: string;
     amount: number;
     memo: string;
   } | null = null;
+
+  let currentFee = 0.003;
+  const feeModal = document.getElementById('feeModal');
+  const feeInput = document.getElementById('feeInput') as HTMLInputElement;
+  const setFeeBtn = document.getElementById('setFeeBtn');
+  const confirmFee = document.getElementById('confirmFee');
+  const cancelFee = document.getElementById('cancelFee');
 
   try {
     // Aktif cüzdanı kontrol et
@@ -50,49 +61,170 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     };
 
-    // Send form handler
+    // Success modal elements
+    const successModal = document.getElementById('successModal');
+    const txIdElement = document.getElementById('txId');
+    const viewTxButton = document.getElementById('viewTx');
+    const closeSuccessButton = document.getElementById('closeSuccess');
+
+    // Show success modal
+    const showSuccessModal = (txid: string) => {
+      if (successModal && txIdElement) {
+        successModal.style.display = 'flex';
+        txIdElement.textContent = txid;
+      }
+    };
+
+    // Hide success modal
+    const hideSuccessModal = () => {
+      if (successModal) {
+        successModal.style.display = 'none';
+      }
+    };
+
+    // View transaction in explorer
+    viewTxButton?.addEventListener('click', () => {
+      const txid = txIdElement?.textContent;
+      if (txid) {
+        window.open(`https://explorer.hiro.so/txid/${txid}?chain=mainnet`, '_blank');
+      }
+    });
+
+    // Close success modal
+    closeSuccessButton?.addEventListener('click', hideSuccessModal);
+
+    // Close modal on outside click
+    successModal?.addEventListener('click', (e) => {
+      if (e.target === successModal) {
+        hideSuccessModal();
+      }
+    });
+
+    // Fee Modal handlers
+    const showFeeModal = () => {
+      if (feeModal && feeInput) {
+        feeModal.style.display = 'flex';
+        feeInput.value = currentFee.toString();
+        feeInput.focus();
+      }
+    };
+
+    const hideFeeModal = () => {
+      if (feeModal) {
+        feeModal.style.display = 'none';
+      }
+    };
+
+    setFeeBtn?.addEventListener('click', showFeeModal);
+    cancelFee?.addEventListener('click', hideFeeModal);
+
+    confirmFee?.addEventListener('click', () => {
+      if (feeInput) {
+        const newFee = parseFloat(feeInput.value);
+        if (newFee >= 0.001) {
+          currentFee = newFee;
+          if (currentFeeElement) {
+            currentFeeElement.textContent = newFee.toString();
+          }
+          hideFeeModal();
+          // Re-validate amount if exists
+          if (amountInput.value) {
+            validateAmount(parseFloat(amountInput.value));
+          }
+        } else {
+          alert('Minimum fee is 0.001 STX');
+        }
+      }
+    });
+
+    feeModal?.addEventListener('click', (e) => {
+      if (e.target === feeModal) {
+        hideFeeModal();
+      }
+    });
+
+    // Amount validation
+    const validateAmount = (value: number) => {
+      if (!amountInput) return;
+      
+      if (value <= 0) {
+        amountInput.setCustomValidity('Amount must be greater than 0');
+      } else {
+        const currentBalance = parseFloat(walletBalance?.textContent?.replace(' STX', '') || '0');
+        const totalAmount = value + currentFee;
+        
+        if (totalAmount > currentBalance) {
+          amountInput.setCustomValidity(`Insufficient balance. Total with fee (${currentFee} STX): ${totalAmount} STX`);
+        } else {
+          amountInput.setCustomValidity('');
+        }
+      }
+      amountInput.reportValidity();
+    };
+
+    // Input validations
+    amountInput?.addEventListener('input', (e) => {
+      const input = e.target as HTMLInputElement;
+      if (input.value === '') {
+        input.setCustomValidity('');
+      } else {
+        validateAmount(parseFloat(input.value));
+      }
+    });
+
+    // Form submission
     sendForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const recipientAddress = (document.getElementById('recipientAddress') as HTMLInputElement).value;
-      const amount = parseFloat((document.getElementById('amount') as HTMLInputElement).value);
-      const memo = (document.getElementById('memo') as HTMLInputElement).value;
-
-      pendingTransaction = { recipientAddress, amount, memo };
-      showPinModal();
+      const recipientAddress = recipientInput?.value;
+      const amount = parseFloat(amountInput?.value);
+      const memo = memoInput?.value || '';
+      
+      try {
+        pendingTransaction = { recipientAddress, amount, memo };
+        showPinModal();
+      } catch (error: any) {
+        alert(`Error: ${error.message}`);
+      }
     });
 
-    // PIN confirmation handler
+    // Input validasyonları
+    recipientInput?.addEventListener('input', (e) => {
+      const input = e.target as HTMLInputElement;
+      const stxAddressRegex = /^(SP|SM)[A-Z0-9]{36,42}$/;
+      
+      if (!stxAddressRegex.test(input.value)) {
+        input.setCustomValidity('Invalid STX address. Must start with SP or SM.');
+      } else {
+        input.setCustomValidity('');
+      }
+      input.reportValidity();
+    });
+
+    // PIN confirmation
     confirmPin?.addEventListener('click', async () => {
-      if (!pendingTransaction || !pinInput.value) return;
+      if (!pendingTransaction || !pinInput?.value) return;
 
       try {
-        // Önce PIN ile cüzdanı seç
         const selectedWallet = await window.wallet.selectWallet(walletData.address, pinInput.value);
         
-        if (!selectedWallet.success) {
-          throw new Error('Invalid PIN');
+        if (!selectedWallet.success || !selectedWallet.wallet.privateKey) {
+          throw new Error('Invalid PIN or wallet access denied');
         }
 
-        if (!selectedWallet.wallet.privateKey) {
-          throw new Error('Wallet private key not found');
-        }
-
-        // Transaction'ı gönder
         const result = await window.wallet.sendSTX(
           selectedWallet.wallet.privateKey,
           pendingTransaction.recipientAddress, 
           pendingTransaction.amount,
-          pendingTransaction.memo
+          pendingTransaction.memo,
+          currentFee
         );
         
         if (result.success) {
           hidePinModal();
-          alert(`Transaction sent successfully!\nTXID: ${result.txid}`);
-          // Form'u temizle
-          (document.getElementById('sendForm') as HTMLFormElement).reset();
+          showSuccessModal(result.txid);
+          (sendForm as HTMLFormElement)?.reset();
           
-          // Balance'ı güncelle
           const newBalance = await window.wallet.getBalance(walletData.address);
           if (walletBalance) {
             walletBalance.textContent = `${newBalance} STX`;
@@ -107,13 +239,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cancel button handler
     cancelPin?.addEventListener('click', hidePinModal);
-
-    // Close modal on outside click
-    pinModal?.addEventListener('click', (e) => {
-      if (e.target === pinModal) {
-        hidePinModal();
-      }
-    });
 
     // Handle Enter key in PIN input
     pinInput?.addEventListener('keyup', (e) => {

@@ -140,7 +140,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         wallet.privateKey, 
         recipientAddress, 
         amount,
-        memo
+        memo,
+        0.003 // Default fee değerini ekle
       );
       
       if (result.success) {

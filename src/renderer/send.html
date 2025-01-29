@@ -48,7 +48,16 @@
                 placeholder="0.000000"
                 required
               >
-              <p class="text-xs text-text-secondary mt-2">Fee: 0.003 STX</p>
+              <div class="flex items-center justify-between mt-2">
+                <p class="text-xs text-text-secondary">Fee: <span id="currentFee">0.003</span> STX</p>
+                <button 
+                  type="button"
+                  id="setFeeBtn"
+                  class="text-xs border border-border hover:bg-hover rounded px-2 py-1 transition-colors duration-300"
+                >
+                  Set Fee
+                </button>
+              </div>
             </div>
             
             <div>
@@ -93,6 +102,65 @@
           </button>
           <button 
             id="cancelPin"
+            class="flex-1 border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+      <div class="bg-bg-dark border border-border rounded-lg p-6 w-96">
+        <div class="text-center">
+          <h3 class="heading-text mb-4">Transaction Sent!</h3>
+          <p class="text-sm text-text-secondary mb-4">Your transaction has been broadcast to the network.</p>
+          
+          <div class="bg-bg-darker p-4 rounded-lg border border-border mb-4">
+            <p class="text-xs text-text-secondary mb-2">Transaction ID</p>
+            <p id="txId" class="text-xs font-mono text-text-primary break-all"></p>
+          </div>
+
+          <button 
+            id="viewTx"
+            class="w-full bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300 mb-2"
+          >
+            View in Explorer
+          </button>
+          
+          <button 
+            id="closeSuccess"
+            class="w-full border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fee Modal -->
+    <div id="feeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+      <div class="bg-bg-dark border border-border rounded-lg p-6 w-96">
+        <h3 class="heading-text mb-4">Set Transaction Fee</h3>
+        <input 
+          type="number" 
+          id="feeInput"
+          step="0.0001"
+          min="0.001"
+          value="0.003"
+          class="w-full bg-bg-darker text-text-primary p-4 rounded-lg border border-border focus:outline-none focus:border-hover mb-4"
+          placeholder="Enter fee amount"
+        >
+        <div class="flex space-x-4">
+          <button 
+            id="confirmFee"
+            class="flex-1 bg-hover text-text-primary rounded-lg hover:bg-opacity-90 transition-all duration-300"
+          >
+            Confirm
+          </button>
+          <button 
+            id="cancelFee"
             class="flex-1 border border-border text-text-primary rounded-lg hover:bg-hover hover:border-hover transition-all duration-300"
           >
             Cancel

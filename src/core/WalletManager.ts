@@ -97,7 +97,8 @@ export class WalletManager {
     senderKey: string,
     recipientAddress: string,
     amount: number,
-    memo: string = ''
+    memo: string = '',
+    fee: number = 0.003 // Default fee parametresi ekleyelim
   ) {
     try {
       if (!senderKey || typeof senderKey !== 'string') {
@@ -133,8 +134,8 @@ export class WalletManager {
       const accountData = await accountResponse.json();
       const nonce = accountData.nonce;
 
-      // Sabit fee kullan (0.003 STX)
-      const fee = 3000; // 0.003 STX in microSTX
+      // Fee'yi microSTX'e çevir
+      const feeInMicroSTX = Math.floor(fee * 1_000_000);
 
       // Create transaction options
       const txOptions = {
@@ -144,7 +145,7 @@ export class WalletManager {
         network,
         memo,
         nonce,
-        fee
+        fee: feeInMicroSTX // Sabit fee yerine parametre olarak gelen fee'yi kullan
       };
 
       // Make and sign transaction
